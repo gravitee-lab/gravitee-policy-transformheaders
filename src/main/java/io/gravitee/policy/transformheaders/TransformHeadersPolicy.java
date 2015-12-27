@@ -19,20 +19,12 @@ import io.gravitee.gateway.api.Request;
 import io.gravitee.gateway.api.Response;
 import io.gravitee.policy.api.PolicyChain;
 import io.gravitee.policy.api.annotations.OnRequest;
-import io.gravitee.policy.api.annotations.OnResponse;
 import io.gravitee.policy.transformheaders.configuration.TransformHeadersPolicyConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author David BRASSELY (brasseld at gmail.com)
  */
 public class TransformHeadersPolicy {
-
-    /**
-     * LOGGER
-     */
-    private final static Logger LOGGER = LoggerFactory.getLogger(TransformHeadersPolicy.class);
 
     /**
      * Transform headers configuration
@@ -54,25 +46,7 @@ public class TransformHeadersPolicy {
         // Add or update request headers
         if (transformHeadersPolicyConfiguration.getAddHeaders() != null) {
             transformHeadersPolicyConfiguration.getAddHeaders().forEach(
-                    header -> request.headers().add(header.getName(), header.getValue()));
-        }
-
-        // Apply next policy in chain
-        policyChain.doNext(request, response);
-    }
-
-    @OnResponse
-    public void onResponse(Request request, Response response, PolicyChain policyChain) {
-        // Remove response headers
-        if (transformHeadersPolicyConfiguration.getRemoveHeaders() != null) {
-            transformHeadersPolicyConfiguration.getRemoveHeaders()
-                    .forEach(headerName -> response.headers().remove(headerName));
-        }
-
-        // Add or update response headers
-        if (transformHeadersPolicyConfiguration.getAddHeaders() != null) {
-            transformHeadersPolicyConfiguration.getAddHeaders().forEach(
-                    header -> request.headers().add(header.getName(), header.getValue()));
+                    header -> request.headers().set(header.getName(), header.getValue()));
         }
 
         // Apply next policy in chain

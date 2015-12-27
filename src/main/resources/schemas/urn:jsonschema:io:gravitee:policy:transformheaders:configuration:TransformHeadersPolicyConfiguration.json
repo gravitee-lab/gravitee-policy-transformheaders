@@ -1,0 +1,38 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:io:gravitee:policy:transformheaders:configuration:TransformHeadersPolicyConfiguration",
+  "properties" : {
+    "removeHeaders" : {
+      "type" : "array",
+      "title": "Remove headers",
+      "items" : {
+        "type" : "string",
+        "title": "Header"
+      }
+    },
+    "addHeaders" : {
+      "type" : "array",
+      "title": "Add headers",
+      "maxItems": 2,
+      "items" : {
+        "type" : "object",
+        "id" : "urn:jsonschema:io:gravitee:policy:transformheaders:configuration:HttpHeader",
+        "title": "Header",
+        "properties" : {
+          "name" : {
+            "title": "Name",
+            "type" : "string"
+          },
+          "value" : {
+            "title": "Value",
+            "type" : "string"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ]
+    }
+  }
+}

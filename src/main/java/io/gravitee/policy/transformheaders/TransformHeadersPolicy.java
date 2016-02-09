@@ -40,13 +40,22 @@ public class TransformHeadersPolicy {
         // Remove request headers
         if (transformHeadersPolicyConfiguration.getRemoveHeaders() != null) {
             transformHeadersPolicyConfiguration.getRemoveHeaders()
-                    .forEach(headerName -> request.headers().remove(headerName));
+                    .forEach(headerName -> {
+                        if (headerName != null && ! headerName.trim().isEmpty()) {
+                            request.headers().remove(headerName);
+                        }
+                    });
         }
 
         // Add or update request headers
         if (transformHeadersPolicyConfiguration.getAddHeaders() != null) {
             transformHeadersPolicyConfiguration.getAddHeaders().forEach(
-                    header -> request.headers().set(header.getName(), header.getValue()));
+                    header -> {
+                        if (header.getName() != null && ! header.getName().trim().isEmpty()) {
+                            request.headers().set(header.getName(), header.getValue());
+                        }
+                    });
+
         }
 
         // Apply next policy in chain

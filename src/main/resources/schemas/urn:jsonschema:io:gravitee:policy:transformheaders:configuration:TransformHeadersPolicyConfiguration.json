@@ -13,7 +13,6 @@
     "addHeaders" : {
       "type" : "array",
       "title": "Add headers",
-      "maxItems": 2,
       "items" : {
         "type" : "object",
         "id" : "urn:jsonschema:io:gravitee:policy:transformheaders:configuration:HttpHeader",

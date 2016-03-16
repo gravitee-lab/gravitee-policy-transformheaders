@@ -27,12 +27,12 @@
             "title": "Value",
             "type" : "string"
           }
-        }
-      },
-      "required": [
-        "name",
-        "value"
-      ]
+        },
+        "required": [
+          "name",
+          "value"
+        ]
+      }
     }
   }
 }

@@ -15,6 +15,7 @@
  */
 package io.gravitee.policy.transformheaders;
 
+import io.gravitee.gateway.api.ExecutionContext;
 import io.gravitee.gateway.api.Request;
 import io.gravitee.gateway.api.Response;
 import io.gravitee.policy.api.PolicyChain;
@@ -36,7 +37,7 @@ public class TransformHeadersPolicy {
     }
 
     @OnRequest
-    public void onRequest(Request request, Response response, PolicyChain policyChain) {
+    public void onRequest(Request request, Response response, ExecutionContext executionContext, PolicyChain policyChain) {
         // Remove request headers
         if (transformHeadersPolicyConfiguration.getRemoveHeaders() != null) {
             transformHeadersPolicyConfiguration.getRemoveHeaders()
@@ -52,7 +53,13 @@ public class TransformHeadersPolicy {
             transformHeadersPolicyConfiguration.getAddHeaders().forEach(
                     header -> {
                         if (header.getName() != null && ! header.getName().trim().isEmpty()) {
-                            request.headers().set(header.getName(), header.getValue());
+                            try {
+                                String extValue = (header.getValue() != null) ?
+                                        executionContext.getTemplateEngine().convert(header.getValue()) : null;
+                                request.headers().set(header.getName(), extValue);
+                            } catch (Exception ex) {
+                                // Do nothing
+                            }
                         }
                     });
 

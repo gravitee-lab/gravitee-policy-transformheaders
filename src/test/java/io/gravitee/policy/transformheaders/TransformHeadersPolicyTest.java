@@ -24,7 +24,7 @@ import io.gravitee.policy.api.PolicyChain;
 import io.gravitee.policy.transformheaders.configuration.HttpHeader;
 import io.gravitee.policy.transformheaders.configuration.PolicyScope;
 import io.gravitee.policy.transformheaders.configuration.TransformHeadersPolicyConfiguration;
-import io.gravitee.reporter.api.http.RequestMetrics;
+import io.gravitee.reporter.api.http.Metrics;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -75,7 +75,7 @@ public class TransformHeadersPolicyTest {
 
         transformHeadersPolicy = new TransformHeadersPolicy(transformHeadersPolicyConfiguration);
         when(executionContext.getTemplateEngine()).thenReturn(templateEngine);
-        when(request.metrics()).thenReturn(RequestMetrics.on(System.currentTimeMillis()).build());
+        when(request.metrics()).thenReturn(Metrics.on(System.currentTimeMillis()).build());
         when(request.headers()).thenReturn(requestHttpHeaders);
         when(response.headers()).thenReturn(responseHtpHeaders);
         when(templateEngine.convert(any(String.class))).thenAnswer(returnsFirstArg());

@@ -19,9 +19,9 @@ import io.gravitee.common.http.HttpHeaders;
 import io.gravitee.gateway.api.ExecutionContext;
 import io.gravitee.gateway.api.Request;
 import io.gravitee.gateway.api.Response;
+import io.gravitee.policy.api.ChainScope;
 import io.gravitee.policy.api.PolicyChain;
-import io.gravitee.policy.api.annotations.OnRequest;
-import io.gravitee.policy.api.annotations.OnResponse;
+import io.gravitee.policy.api.annotations.*;
 import io.gravitee.policy.transformheaders.configuration.PolicyScope;
 import io.gravitee.policy.transformheaders.configuration.TransformHeadersPolicyConfiguration;
 
@@ -29,6 +29,10 @@ import io.gravitee.policy.transformheaders.configuration.TransformHeadersPolicyC
  * @author David BRASSELY (david.brassely at graviteesource.com)
  * @author GraviteeSource Team
  */
+@Policy(
+        category = @Category(io.gravitee.policy.api.Category.TRANSFORMATION),
+        scope = @Scope(ChainScope.API)
+)
 public class TransformHeadersPolicy {
 
     /**

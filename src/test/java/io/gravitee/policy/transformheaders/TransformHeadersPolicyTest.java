@@ -24,13 +24,14 @@ import io.gravitee.policy.api.PolicyChain;
 import io.gravitee.policy.transformheaders.configuration.HttpHeader;
 import io.gravitee.policy.transformheaders.configuration.PolicyScope;
 import io.gravitee.policy.transformheaders.configuration.TransformHeadersPolicyConfiguration;
-import io.gravitee.reporter.api.http.Metrics;
+//import io.gravitee.reporter.api.http.RequestMetrics;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
@@ -75,7 +76,7 @@ public class TransformHeadersPolicyTest {
 
         transformHeadersPolicy = new TransformHeadersPolicy(transformHeadersPolicyConfiguration);
         when(executionContext.getTemplateEngine()).thenReturn(templateEngine);
-        when(request.metrics()).thenReturn(Metrics.on(System.currentTimeMillis()).build());
+        //when(request.metrics()).thenReturn(RequestMetrics.on(System.currentTimeMillis()).build());
         when(request.headers()).thenReturn(requestHttpHeaders);
         when(response.headers()).thenReturn(responseHtpHeaders);
         when(templateEngine.convert(any(String.class))).thenAnswer(returnsFirstArg());
@@ -140,6 +141,22 @@ public class TransformHeadersPolicyTest {
         // Verify
         verify(policyChain).doNext(request, response);
         assertEquals("Value", responseHtpHeaders.getFirst("X-Gravitee-Test"));
+    }
+
+    @Test
+    public void testOnResponse_addMultipleHeaders() {
+        // Prepare
+        when(transformHeadersPolicyConfiguration.getScope()).thenReturn(PolicyScope.RESPONSE);
+        when(transformHeadersPolicyConfiguration.getAddHeaders()).thenReturn(Arrays.asList(
+                new HttpHeader("X-Gravitee-Header1", "Header1"), new HttpHeader("X-Gravitee-Header2", "Header2")));
+
+        // Run
+        transformHeadersPolicy.onResponse(request, response, executionContext, policyChain);
+
+        // Verify
+        verify(policyChain).doNext(request, response);
+        assertEquals("Header1", responseHtpHeaders.getFirst("X-Gravitee-Header1"));
+        assertEquals("Header2", responseHtpHeaders.getFirst("X-Gravitee-Header2"));
     }
 
     @Test

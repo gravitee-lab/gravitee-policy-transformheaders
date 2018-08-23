@@ -59,6 +59,19 @@ public class TransformHeadersPolicyConfigurationTest {
         assertEquals(1, configuration.getRemoveHeaders().size());
     }
 
+    @Test
+    public void test_transformHeaders03() throws IOException {
+        TransformHeadersPolicyConfiguration configuration =
+                load("/io/gravitee/policy/transformheaders/configuration/transformheaders03.json", TransformHeadersPolicyConfiguration.class);
+
+        assertEquals(PolicyScope.RESPONSE, configuration.getScope());
+        assertNotEquals(null, configuration.getAddHeaders());
+        assertNotEquals(null, configuration.getRemoveHeaders());
+
+        assertEquals(2, configuration.getAddHeaders().size());
+        assertEquals(1, configuration.getRemoveHeaders().size());
+    }
+
     private <T> T load(String resource, Class<T> type) throws IOException {
         URL jsonFile = this.getClass().getResource(resource);
         return new ObjectMapper().readValue(jsonFile, type);
